@@ -2,7 +2,7 @@
 var canvas = document.getElementById('mycanvas')
 canvas.width = 600
 canvas.height = 800
-var promisedGif = fetch('/tokusatsu.gif')
+var promisedGif = fetch('/samurai.gif')
         .then(resp => resp.arrayBuffer())
         .then(buff => new GIF(buff))
         .then(gif => playGIF(gif, canvas))

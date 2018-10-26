@@ -5,16 +5,20 @@
     <script src="aframe-ar.js"></script>
     <script src="gif-component.js"></script>
     <body>
-        <!-- <a-scene>
+        <a-scene>
             <a-marker id="mymarker" type="pattern" url="/temaki.patt">
-                <a-entity geometry="primitive: plane"  gif="src: /gar.gif; marker: #mymarker"></a-entity>
+                <a-entity id="entity" gif="src: /samurai.gif; marker: #mymarker; scale: 1.5 1.5;">
+                </a-entity>
             </a-marker>
-        </a-scene> -->
-        <canvas id="mycanvas"></canvas>
-        <!-- <img src="/gar.gif"></img> -->
+            <a-marker id="mymarker2" type="pattern" url="/tokusatsu.patt">
+                <a-entity id="entity2" gif="src: /manekineko.gif; marker: #mymarker2;">
+                </a-entity>
+            </a-marker>
+            <a-marker id="mymarker3" type="pattern" url="/antipodas.patt">
+                <a-entity id="entity2" gif="src: /janela.gif; marker: #mymarker3;">
+                </a-entity>
+            </a-marker>
+            <a-entity camera></a-entity>
+        </a-scene>
     </body>
-
-
-    <script src="main.js"></script>
-    
 </html>
