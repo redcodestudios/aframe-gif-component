@@ -1,0 +1,84 @@
+<html>
+    <script src="gifuct-js.js"></script>
+    <script src="aframe.js"></script>
+    <script src="aframe-ar.js"></script>
+    <script src="gif-component.js"></script>
+    <body>
+        <canvas id="mycanvas"></canvas>
+        <button onclick="nextFrame()">porra</button>
+        <button onclick="previousFrame()">caralho</button>    
+    </body>
+    <script>
+        drawGIF = function(canvas, frame) {
+            console.log(frame)
+            var tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = frame.dims.width;
+            tmpCanvas.height = frame.dims.height;
+    
+            var tmpCtx = tmpCanvas.getContext('2d');
+            var mainCtx = canvas.getContext('2d');
+
+            var frameImageData = tmpCtx.createImageData(frame.dims.width, frame.dims.height);
+            frameImageData.data.set(frame.patch);
+
+            tmpCtx.putImageData(frameImageData, 0, 0);
+
+            mainCtx.drawImage(tmpCanvas, frame.dims.left, frame.dims.top);
+        }
+
+        renderGIF = function(canvas, frames, frameIndex) {
+            frame = frames[frameIndex]
+            var start = new Date().getTime();
+                        
+            if(frameIndex != 0) {
+                var previousFrame = frames[frameIndex-1]
+                console.log(previousFrame)
+                if(previousFrame.disposalType == 2){
+                    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+                }
+            } else {
+                canvas.width = frame.dims.width;
+                canvas.height = frame.dims.height;
+                console.log(canvas.width)
+                console.log(canvas.height)
+                drawGIF(canvas, frame);
+            }
+        
+            var end = new Date().getTime();
+        
+            var timeDiff = end - start;
+        
+
+        }
+
+        canvas = document.getElementById("mycanvas")
+        gif = fetch('/src/tokusatsu.gif')
+        .then(resp => resp.arrayBuffer())
+        .then(buff => new GIF(buff));
+        console.log(gif)
+        frames = gif.then(gif => gif.decompressFrames(true))
+        frameIndex = 0
+        frames.then(frames => renderGIF(canvas, frames, 0));
+        nextFrame = function(){
+            frameIndex += 1
+            frames.then(frames=>{
+                if (frameIndex >= frames.length) {
+                    frameIndex = 0;
+                    
+                }
+            }
+            )            
+            console.log(frameIndex)
+            frames.then(frames=>renderGIF(canvas,frames,frameIndex))
+        }
+        previousFrame = function(){
+            frameIndex -= 1
+            if (frameIndex < 0) {
+                frames.then(frames=> frameIndex = frames.length -1)
+            }
+            console.log(frameIndex)
+            frames.then(frames=>renderGIF(canvas,frames,frameIndex))
+        
+        }
+    </script>
+</html>
