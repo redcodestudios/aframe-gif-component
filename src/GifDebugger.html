@@ -3,12 +3,24 @@
     <script src="aframe.js"></script>
     <script src="aframe-ar.js"></script>
     <script src="gif-component.js"></script>
+    
     <body>
         <canvas id="mycanvas"></canvas>
-        <button onclick="nextFrame()">porra</button>
-        <button onclick="previousFrame()">caralho</button>    
+        <button onclick="previousFrame()">Anterior</button>    
+        <button onclick="nextFrame()">Próximo</button>
+    
     </body>
+
     <script>
+        canvas = document.getElementById("mycanvas")
+        gif = fetch('/tokusatsu.gif')
+        .then(resp => resp.arrayBuffer())
+        .then(buff => new GIF(buff));
+        console.log(gif)
+        frames = gif.then(gif => gif.decompressFrames(true))
+        frameIndex = 0
+        frames.then(frames => renderGIF(canvas, frames, 0));
+        
         drawGIF = function(canvas, frame) {
             console.log(frame)
             var tmpCanvas = document.createElement('canvas');
@@ -31,18 +43,20 @@
             var start = new Date().getTime();
                         
             if(frameIndex != 0) {
-                var previousFrame = frames[frameIndex-1]
-                console.log(previousFrame)
-                if(previousFrame.disposalType == 2){
-                    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-                }
+
+                canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+                // var previousFrame = frames[frameIndex-1]
+                // console.log(previousFrame)
+                // if(previousFrame.disposalType == 2){
+                //     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+                // }
             } else {
                 canvas.width = frame.dims.width;
                 canvas.height = frame.dims.height;
                 console.log(canvas.width)
                 console.log(canvas.height)
-                drawGIF(canvas, frame);
             }
+            drawGIF(canvas, frame);
         
             var end = new Date().getTime();
         
@@ -51,14 +65,6 @@
 
         }
 
-        canvas = document.getElementById("mycanvas")
-        gif = fetch('/src/tokusatsu.gif')
-        .then(resp => resp.arrayBuffer())
-        .then(buff => new GIF(buff));
-        console.log(gif)
-        frames = gif.then(gif => gif.decompressFrames(true))
-        frameIndex = 0
-        frames.then(frames => renderGIF(canvas, frames, 0));
         nextFrame = function(){
             frameIndex += 1
             frames.then(frames=>{
